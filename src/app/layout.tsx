@@ -1,4 +1,14 @@
 import type { Metadata } from "next";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignOutButton
+} from '@clerk/nextjs'
+import { dark, neobrutalism  } from "@clerk/themes"
 import { Geist, Geist_Mono, Inter, IBM_Plex_Mono } from "next/font/google";
 
 import { ThemeProvider } from "@/components/theme-provider";
@@ -26,19 +36,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${plexMono.variable} antialiased`}
-      >
-        <ThemeProvider        
+    <ClerkProvider
+      appearance={{
+     theme: [dark, neobrutalism],
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${inter.variable} ${plexMono.variable} antialiased`}
+        >
+          <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+          >
+            {children}
+            <br></br>
+            <SignedOut>
+              <div className="flex gap-2">
+
+                <SignInButton>
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded-md">Waapas aja</button>
+                </SignInButton>
+                <SignUpButton>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded-md">Naya bana le</button>
+                </SignUpButton>
+              </div>
+            </SignedOut>
+            <SignedIn>
+              <UserButton></UserButton>
+              <SignOutButton>
+                <button>Chala ja</button>
+              </SignOutButton>
+            </SignedIn>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

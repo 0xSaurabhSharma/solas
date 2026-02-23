@@ -1,4 +1,4 @@
-import { inngest } from "@/inngest/client"; 
+import { inngest } from "@/inngest/client";
 import { firecrawl } from "@/lib/firecrawl";
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
@@ -34,18 +34,18 @@ export const getResponse = inngest.createFunction(
 
         // prompt -> urls -> crawl url -> final_prompt -> invoke
 
-        const {prompt} = event.data as {prompt: string;}
-        
-        const urls = await step.run('extract-urls', async ()=> {
+        const { prompt } = event.data as { prompt: string; }
+
+        const urls = await step.run('extract-urls', async () => {
             return prompt.match(URL_REGEX) ?? [];
         }) as string[];
 
-        const scrapedContent = await step.run('scrape-urls', async ()=> {
+        const scrapedContent = await step.run('scrape-urls', async () => {
             const results = await Promise.all(
-                urls.map (async (url) => {
+                urls.map(async (url) => {
                     const res = await firecrawl.scrape(
                         url,
-                        { formats: ['markdown']}
+                        { formats: ['markdown'] }
                     );
                     return res.markdown ?? null;
                 })
@@ -54,15 +54,31 @@ export const getResponse = inngest.createFunction(
         })
 
         const finalPrompt = scrapedContent
-        ? `${prompt}\n\nScraped Content:\n\n${scrapedContent}`
-        : prompt;
+            ? `${prompt}\n\nScraped Content:\n\n${scrapedContent}`
+            : prompt;
 
         return await step.run('generate-text', async () => {
             const result = await generateText({
                 model: google('gemini-2.5-flash'),
                 prompt: finalPrompt,
+                experimental_telemetry: {
+                    isEnabled: true,
+                    recordInputs: true,
+                    recordOutputs: true,
+                },
             });
             return { response: result };
         });
     }
 )
+
+
+export const demoError = inngest.createFunction(
+    { id: "demo-error" },
+    { event: "demo/error" },
+    async ({ step }) => {
+        await step.run("fail", async () => {
+            throw new Error("Inngest error: Background job failed!");
+        });
+    }
+);

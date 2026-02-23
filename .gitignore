@@ -43,3 +43,6 @@ next-env.d.ts
 
 scratch.md
 
+
+# Sentry Config File
+.env.sentry-build-plugin

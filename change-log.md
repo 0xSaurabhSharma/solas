@@ -28,9 +28,18 @@
 - blocking vs non-blocking
 
 
+## Firecrawl
 
+## Observability integration
+
+- error, on client, api, background jobs tracking
+- performance monitoring
+- logging
+- token tracking
 
 ---
+
+/sentry-example-page
 
 - React thinking
 - Tailwind thinking

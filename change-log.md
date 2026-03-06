@@ -37,10 +37,20 @@
 - logging
 - token tracking
 
+## Project View
+
+
+## IDE Layout
+
+- 
+
+
 ---
 
 /sentry-example-page
 
 - React thinking
 - Tailwind thinking
-- 
+
+
+- documentation: system design, ai & memory, modules, 

@@ -12,7 +12,14 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
+
+bunx convex dev
+
+
 ```
+
+Sentry Dashboard Link: [text](https://saurabh-sharma-lm.sentry.io/issues/?project=4510934114369616)
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
